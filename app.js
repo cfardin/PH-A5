@@ -22,6 +22,48 @@ const toggleBtn = (id) =>{
 };
    
 
+const modify = (issue) =>{
+    const div = document.createElement("div");
+    div.className = "badge badge-soft";
+
+    const priorityBadge = {
+        high: "badge-secondary",
+        medium: "badge-warning",
+        low: "badge-info"
+    }
+
+    div.classList.add(priorityBadge[issue.priority]);
+
+    return div;
+};
+
+const borderChanger = (div, issue) =>{
+   const border = {
+        closed: 'border-primary',
+        open: 'border-success'
+    }
+    div.classList.add(border[issue.status]);  
+};
+
+const labelAdder = (l, labels) => {
+    for (let i of labels) {
+        const div = document.createElement('div');
+        div.className = "badge badge-soft";
+
+        if (i === 'bug') {
+            div.classList.add("badge-error");
+        } 
+        else if (i === 'help wanted') {
+            div.classList.add("badge-warning");
+        } 
+        else {
+            div.classList.add("badge-accent");
+        }
+
+        div.textContent = i.toUpperCase();
+        l.appendChild(div);
+    }
+};
 
 // loading all data for api 
 const loadIssues = (btn) =>{
@@ -69,7 +111,7 @@ const displayIssue = (btn) =>{
 
 // for makeing the issue card 
 const issueCard = (issue) =>{
-    const leftStatusIcon = "";
+    let leftStatusIcon = "";
     if(issue.status === 'open'){
         leftStatusIcon = "./assets/Open-Status.png";
     } else {
@@ -84,21 +126,28 @@ const issueCard = (issue) =>{
             </div>
 
             <div>
-               <h3>${issue.title}</h3>
-               <p>${issue.description}</p> 
+               <h3 class="text-[18px] font-semibold">${issue.title}</h3>
+               <p class="text-[#64748B]">${issue.description}</p> 
             </div>
-            <div>
-                <button class="btn">lol</button>
-                <button class="btn">lol</button>
+            <div class="labels">
             </div>
             <hr>
-            <p>name</p>
-            <p>date</p>
+            <div class="labels">
+                <p>#${issue.id} by ${issue.author}</p>
+                <p>${issue.createdAt}</p>
+            </div>
     `;
+    
+    const header = cards.querySelector(".head");
+    const labels = cards.querySelector(".labels");
+    borderChanger(cards, issue);
+    labelAdder(labels, issue.labels);
 
-    return 
+    header.appendChild(modify(issue));
+    return cards;
 
 };
 
 
-// loadIssues('all-btn');
+
+loadIssues('all-btn');
