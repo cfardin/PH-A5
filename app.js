@@ -111,18 +111,19 @@ const displayIssue = (btn) =>{
 
 // for makeing the issue card 
 const issueCard = (issue) =>{
-    let leftStatusIcon = "";
+    let statusIcon;
     if(issue.status === 'open'){
-        leftStatusIcon = "./assets/Open-Status.png";
-    } else {
-        leftStatusIcon = "./assets/Closed-Status.png";
+        statusIcon = "./assets/Open-Status.png";
+    } else if(issue.status === 'closed') {
+        statusIcon = "./assets/Closed-Status.png";
     }
 
+    
     const cards = document.createElement("div");
     cards.className = "bg-white p-6 rounded-lg space-y-2 h-[100%] w-full"
     cards.innerHTML =  `
             <div class="flex justify-between head">
-                <img src="${leftStatusIcon}" alt="">
+                <img src="${statusIcon}" alt="">
             </div>
 
             <div>
