@@ -2,3 +2,18 @@
   font-family: "Open Sans", sans-serif;
   /* background-color: #F8FAFC; */
 }
+
+.dot{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.green{
+    background-color: green;
+}
+
+.purple{
+    background-color: purple;
+}

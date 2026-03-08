@@ -26,7 +26,7 @@
 
 </head>
 
-<body>
+<body class="bg-gray-100">
 
     <header>
         <!-- navbar -->
@@ -40,13 +40,13 @@
                 <div>
                     <label class="input validator join-item">
                         <!-- <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> -->
-                            <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
-                                stroke="currentColor">
-                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                            </g>
+                        <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
+                            stroke="currentColor">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </g>
                         </svg>
-                        <input type="text" placeholder="Search issues..."/>
+                        <input type="text" placeholder="Search issues..." />
                     </label>
                     <div class="validator-hint hidden">Enter valid email address</div>
                 </div>
@@ -55,6 +55,76 @@
         </div>
     </header>
 
+
+    <!-- tab button section -->
+    <section class="bg-white container m-auto p-6 mt-14 mb-4 rounded-lg shadow-md">
+        <button onclick="loadIssues('all-btn')" id="all-btn" class="btn btn-outline btn-primary bg-primary text-white">All</button>
+        <button onclick="loadIssues('open-btn')" id="open-btn" class="btn btn-outline btn-primary">Open</button>
+        <button onclick="loadIssues('closed-btn')" id="closed-btn" class="btn btn-outline btn-primary">Closed</button>
+
+    </section>
+
+    <!-- issues section -->
+    <section class="flex justify-between items-center bg-white container m-auto p-6 rounded-lg shadow-md">
+        <!-- left -->
+        <div class="flex items-center  gap-1">
+            <img src="assets/Aperture.png" alt="">
+            <div>
+                <h3 class="text-[20px] font-semibold"><span id="issue_count">0</span> Issues</h3>
+                <p class="text-[#64748B]">Track and manage your project issues</p>
+            </div>
+        </div>
+
+        <div class="flex gap-6">
+                <p><span class="dot green"></span> Open</p>
+                <p><span class="dot purple"></span> Closed</p>
+        </div>
+    </section>
+
+    <!-- issues -->
+    <section id="issue-container" class="container m-auto grid grid-cols-4 p-6">
+        <!-- <div class="bg-white p-6 rounded-lg space-y-2 h-[100%] w-full">
+            <div class="flex justify-between">
+                <img src="assets/Open-Status.png" alt="">
+                <button class="btn">lol</button>
+            </div>
+
+            <div>
+               <h3>Fix navigation menu on mobile devices</h3>
+               <p>The navigation menu doesn't collapse properly on mobile devices...</p> 
+            </div>
+            <div>
+                <button class="btn">lol</button>
+                <button class="btn">lol</button>
+            </div>
+            <hr>
+            <p>name</p>
+            <p>date</p>
+        </div> -->
+        <!-- ig this card will work !  -->
+        <div class="bg-white p-6 rounded-lg space-y-2 h-[100%] w-full">
+             <div class="flex justify-between head">
+                <img src="${leftStatusIcon}" alt="">
+            </div>
+
+            <div>
+               <h3>${issue.title}</h3>
+               <p>${issue.description}</p> 
+            </div>
+            <div class="lavels">
+            </div>
+            <hr>
+            <p>#${issue.id} by ${issue.author}</p>
+            <p>${createdAt}</p>
+        </div>
+
+
+    </section>
+
+
+   
+
+    <script src="app.js"></script>
 </body>
 
 </html>
