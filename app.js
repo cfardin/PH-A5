@@ -6,6 +6,16 @@ const allBtns = ['all-btn', 'open-btn', 'closed-btn'];
 const allBtn = document.getElementById("all-btn");
 const openBtn = document.getElementById("open-btn");
 const closedBtn = document.getElementById("closed-btn");
+const spinner = document.getElementById("spinner");
+
+// loading spinner 
+const loadingSpinner = (b) =>{
+    if(b){
+        spinner.classList.remove("hidden");
+    } else{
+        spinner.classList.add("hidden");
+    }
+}
 
 
 // toggle system for tab buttons and changing tabs 
@@ -33,6 +43,7 @@ const modify = (issue) =>{
     }
 
     div.classList.add(priorityBadge[issue.priority]);
+    div.textContent = issue.priority;
 
     return div;
 };
@@ -68,6 +79,7 @@ const labelAdder = (l, labels) => {
 // loading all data for api 
 const loadIssues = (btn) =>{
 
+    loadingSpinner(true);
     toggleBtn(btn);
 
     fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
@@ -107,6 +119,8 @@ const displayIssue = (btn) =>{
     issue[btn].forEach(issue => {
         issueContainer.appendChild(issueCard(issue));
     });
+
+    loadingSpinner(false);
 };
 
 // for makeing the issue card 
@@ -118,7 +132,7 @@ const issueCard = (issue) =>{
         statusIcon = "./assets/Closed-Status.png";
     }
 
-    
+
     const cards = document.createElement("div");
     cards.className = "bg-white p-6 rounded-lg space-y-2 h-[100%] w-full"
     cards.innerHTML =  `
