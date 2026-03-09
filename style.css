@@ -11,9 +11,18 @@
 }
 
 .green{
-    background-color: green;
+    background-color: #00A96E;
 }
 
 .purple{
-    background-color: purple;
+    background-color: #A855F7;
+}
+
+
+.border-purple{
+    border-top: 3px solid #A855F7;
+}
+
+.border-green{
+    border-top: 3px solid #00A96E;
 }

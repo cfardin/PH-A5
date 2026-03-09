@@ -50,8 +50,8 @@ const modify = (issue) =>{
 
 const borderChanger = (div, issue) =>{
    const border = {
-        closed: 'border-primary',
-        open: 'border-success'
+        closed: 'border-purple',
+        open: 'border-green'
     }
     div.classList.add(border[issue.status]);  
 };
