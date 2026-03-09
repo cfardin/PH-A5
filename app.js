@@ -8,32 +8,34 @@ const openBtn = document.getElementById("open-btn");
 const closedBtn = document.getElementById("closed-btn");
 const spinner = document.getElementById("spinner");
 
+const issueContainer = document.getElementById("issue-container");
+
 
 // loading spinner 
-const loadingSpinner = (b) =>{
-    if(b){
+const loadingSpinner = (b) => {
+    if (b) {
         spinner.classList.remove("hidden");
-    } else{
+    } else {
         spinner.classList.add("hidden");
     }
 }
 
 
 // toggle system for tab buttons and changing tabs 
-const toggleBtn = (id) =>{
-    for(let b of allBtns){
+const toggleBtn = (id) => {
+    for (let b of allBtns) {
         const btn = document.getElementById(b);
 
-        if(b === id){
+        if (b === id) {
             btn.classList.add('bg-primary', 'text-white');
-        } else{
+        } else {
             btn.classList.remove('bg-primary', 'text-white');
         }
     }
 };
-   
 
-const modify = (issue) =>{
+
+const modify = (issue) => {
     const div = document.createElement("div");
     div.className = "badge badge-soft";
 
@@ -49,12 +51,12 @@ const modify = (issue) =>{
     return div;
 };
 
-const borderChanger = (div, issue) =>{
-   const border = {
+const borderChanger = (div, issue) => {
+    const border = {
         closed: 'border-purple',
         open: 'border-green'
     }
-    div.classList.add(border[issue.status]);  
+    div.classList.add(border[issue.status]);
 };
 
 const labelAdder = (l, labels) => {
@@ -64,10 +66,10 @@ const labelAdder = (l, labels) => {
 
         if (i === 'bug') {
             div.classList.add("badge-error");
-        } 
+        }
         else if (i === 'help wanted') {
             div.classList.add("badge-warning");
-        } 
+        }
         else {
             div.classList.add("badge-accent");
         }
@@ -81,36 +83,36 @@ const labelAdder = (l, labels) => {
 
 
 // loading all data for api 
-const loadIssues = (btn) =>{
+const loadIssues = (btn) => {
 
     loadingSpinner(true);
     toggleBtn(btn);
 
     fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
-    .then(res => res.json())
-    .then(data => {
-        allIssues = data.data;
+        .then(res => res.json())
+        .then(data => {
+            allIssues = data.data;
 
-         openIssues = allIssues.filter(issue => issue.status === "open");
-        closedIssues = allIssues.filter(issue => issue.status === "closed");
+            openIssues = allIssues.filter(issue => issue.status === "open");
+            closedIssues = allIssues.filter(issue => issue.status === "closed");
 
-        displayIssue(btn);
-    });
+            displayIssue(btn);
+        });
 };
 
 // for displaying all the issues 
-const displayIssue = (btn) =>{
-    const issueContainer = document.getElementById("issue-container");
+const displayIssue = (btn) => {
+    // const issueContainer = document.getElementById("issue-container");
     issueContainer.innerHTML = "";
 
     toggleBtn(btn);
-    
+
     const issueDisplayCount = document.getElementById("issue_count");
 
     const issue = {
-        "all-btn" : allIssues,
-        "open-btn" : openIssues,
-        "closed-btn" : closedIssues
+        "all-btn": allIssues,
+        "open-btn": openIssues,
+        "closed-btn": closedIssues
     }
     issueDisplayCount.innerText = issue[btn].length;
 
@@ -128,18 +130,18 @@ const displayIssue = (btn) =>{
 };
 
 // for makeing the issue card 
-const issueCard = (issue) =>{
+const issueCard = (issue) => {
     let statusIcon;
-    if(issue.status === 'open'){
+    if (issue.status === 'open') {
         statusIcon = "./assets/Open-Status.png";
-    } else if(issue.status === 'closed') {
+    } else if (issue.status === 'closed') {
         statusIcon = "./assets/Closed-Status.png";
     }
 
 
     const cards = document.createElement("div");
     cards.className = "bg-white p-6 rounded-lg space-y-2 h-[100%] w-full"
-    cards.innerHTML =  `
+    cards.innerHTML = `
             <div class="flex justify-between head">
                 <img src="${statusIcon}" alt="">
             </div>
@@ -155,7 +157,7 @@ const issueCard = (issue) =>{
                 <p>${issue.createdAt}</p>
             </div>
     `;
-    
+
     const header = cards.querySelector(".head");
     const labels = cards.querySelector(".labels");
     borderChanger(cards, issue);
@@ -169,13 +171,36 @@ const issueCard = (issue) =>{
 
     header.appendChild(modify(issue));
 
-   
+
     return cards;
 
 };
 
+// searching system 
+const searching = async() => {
+    issueContainer.innerHTML = "";
+    loadingSpinner(true);
 
-const cardModal = (card) =>{
+    const input = document.getElementById("search-input").value.toLowerCase();
+    // const searchBtn = document.getElementById("search-btn");
+
+    const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${input}`);
+    
+    const data = await res.json();
+    toggleBtn("");
+    const match = data.data;
+    
+    const issueCount = document.getElementById("issue_count");
+    issueCount.textContent = match.length;
+    match.forEach(i =>{
+        const div = issueCard(i);
+        issueContainer.appendChild(div);
+    });
+    loadingSpinner(false)
+};
+
+// modal for the cards info
+const cardModal = (card) => {
     const modalCard = document.getElementById("my_modal");
     modalCard.innerHTML = `
         <div class="modal-box space-y-6 ">
@@ -194,13 +219,11 @@ const cardModal = (card) =>{
 
             <div class="flex justify-between items-center bg-neutral-100 rounded-md p-2">
                 <div class="text-left">
-                    <p class="text-[#64748B] ">
-                        Assignee:
-                    </p>
+                    <p class="text-[#64748B] ">Assignee:</p>
                     <p class="font-semibold">${card.author}</p>
                 </div>
 
-                <div class="text-center">
+                <div class="text-left">
                     <p class="text-[#64748B]">Priority:</p>
                     <p class="priority">${card.priority.toUpperCase()}</p>
                 </div>
@@ -218,9 +241,9 @@ const cardModal = (card) =>{
     labelAdder(labels, card.labels);
 
     const badge = {
-        high : "badge badge-error",
-        medium : "badge badge-warning",
-        low : "badge"
+        high: "badge badge-error",
+        medium: "badge badge-warning",
+        low: "badge"
     }
 
     const priority = modalCard.querySelector('.priority');
