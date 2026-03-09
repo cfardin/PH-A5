@@ -203,7 +203,7 @@ const searching = async() => {
 const cardModal = (card) => {
     const modalCard = document.getElementById("my_modal");
     modalCard.innerHTML = `
-        <div class="modal-box space-y-6 ">
+        <div class="modal-box space-y-6 border-none">
             <h3 class="text-xl font-bold">${card.title}</h3>
             <div class="flex gap-1 items-center">
                 <div class="text-white text-center ${card.status === 'open' ? "badge badge-success" : "badge badge-primary"}">${card.status === "open" ? "Opened" : "Closed"}</div>
