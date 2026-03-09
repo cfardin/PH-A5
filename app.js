@@ -154,7 +154,7 @@ const issueCard = (issue) => {
             <hr>
             <div class="labels">
                 <p>#${issue.id} by ${issue.author}</p>
-                <p>${issue.createdAt}</p>
+                <p>${new Date(issue.createdAt).toLocaleDateString()}</p>
             </div>
     `;
 
@@ -189,7 +189,7 @@ const searching = async() => {
     const data = await res.json();
     toggleBtn("");
     const match = data.data;
-    
+
     const issueCount = document.getElementById("issue_count");
     issueCount.textContent = match.length;
     match.forEach(i =>{
@@ -243,7 +243,7 @@ const cardModal = (card) => {
     const badge = {
         high: "badge badge-error",
         medium: "badge badge-warning",
-        low: "badge"
+        low: "badge badge-soft badge-info"
     }
 
     const priority = modalCard.querySelector('.priority');
