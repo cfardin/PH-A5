@@ -8,6 +8,7 @@ const openBtn = document.getElementById("open-btn");
 const closedBtn = document.getElementById("closed-btn");
 const spinner = document.getElementById("spinner");
 
+
 // loading spinner 
 const loadingSpinner = (b) =>{
     if(b){
@@ -76,6 +77,9 @@ const labelAdder = (l, labels) => {
     }
 };
 
+
+
+
 // loading all data for api 
 const loadIssues = (btn) =>{
 
@@ -139,7 +143,6 @@ const issueCard = (issue) =>{
             <div class="flex justify-between head">
                 <img src="${statusIcon}" alt="">
             </div>
-
             <div>
                <h3 class="text-[18px] font-semibold">${issue.title}</h3>
                <p class="text-[#64748B]">${issue.description}</p> 
@@ -158,11 +161,73 @@ const issueCard = (issue) =>{
     borderChanger(cards, issue);
     labelAdder(labels, issue.labels);
 
+
+    cards.onclick = function () {
+        cardModal(issue);
+    }
+
+
     header.appendChild(modify(issue));
+
+   
     return cards;
 
 };
 
 
+const cardModal = (card) =>{
+    const modalCard = document.getElementById("my_modal");
+    modalCard.innerHTML = `
+        <div class="modal-box space-y-6 ">
+            <h3 class="text-xl font-bold">${card.title}</h3>
+            <div class="flex gap-1 items-center">
+                <div class="text-white text-center ${card.status === 'open' ? "badge badge-success" : "badge badge-primary"}">${card.status === "open" ? "Opened" : "Closed"}</div>
+                <p class = "text-[#64748B] text-[12px]">Opened by ${card.author} at ${new Date(card.createdAt).toLocaleDateString()}</p>
+            </div>
+
+            <div class="labels">
+            </div>
+
+            <p class="text-[#64748B]">
+                ${card.description}
+            </p>
+
+            <div class="flex justify-between items-center bg-neutral-100 rounded-md p-2">
+                <div class="text-left">
+                    <p class="text-[#64748B] ">
+                        Assignee:
+                    </p>
+                    <p class="font-semibold">${card.author}</p>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-[#64748B]">Priority:</p>
+                    <p class="priority">${card.priority.toUpperCase()}</p>
+                </div>
+            </div>
+            <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn btn-primary">Close</button>
+                </form>
+            </div>
+        </div>
+    `;
+
+    const labels = modalCard.querySelector('.labels');
+    labelAdder(labels, card.labels);
+
+    const badge = {
+        high : "badge badge-error",
+        medium : "badge badge-warning",
+        low : "badge"
+    }
+
+    const priority = modalCard.querySelector('.priority');
+    priority.className = badge[card.priority];
+
+    modalCard.showModal();
+
+};
 
 loadIssues('all-btn');
